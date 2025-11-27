@@ -6,8 +6,6 @@ from abc import ABC
 # of PR
 from typing import Tuple
 
-
-
 # The base class
 class Node(ABC):
     pass
@@ -40,29 +38,63 @@ class Symbol(Node):
 
 
 class PR(Node):
-    """This class represent a pair of parentheses and the content inside. The content
-    is stored as children of this node
+    """This class represent a pair of parentheses and the content inside.There is just one content inside the parentheses
     """
-    def __init__(self,*nodes:Tuple[Node]):
-        """This constructor builds the PR node. It takes its children (as varargs) as argument (notice
-        the use of Tuple in type hints)
+    def __init__(self,node:Node):
+        """This constructor builds the PR node. It takes one node as a child
         Args:
-            *nodes (Tuple[Node]): a varargs argument representing the children of this node
+            *node (Node): the child of this nod
         """
-        self.children=nodes
+        self.node=node
     
     def __str__(self)->str:
         """This methods returns a string representation of this node. It consist of "("
-        followed by the string representations of its children (separated by commas) and a final ")". In fact,
-        this function is recursive
+        followed by the string representations of its content and a final ")". This function is recursive.
 
         Returns:
             str: The string representation of this node
         """
-        return f'PR({",".join([str(ch) for ch in self.children])})'
+        return f'PR({node})'
 
+class PR(Node):
+    """This class represent a pair of parentheses and the content inside.There is just one content inside the parentheses
+    """
+    def __init__(self,node:Node):
+        """This constructor builds the PR node. It takes one node as a child
+        Args:
+            *node (Node): the child of this nod
+        """
+        self.node=node
+    
+    def __str__(self)->str:
+        """This methods returns a string representation of this node. It consist of "("
+        followed by the string representations of its content and a final ")". This function is recursive.
+
+        Returns:
+            str: The string representation of this node
+        """
+        return f'({self.node})'
+
+class Concat(Node):
+    """This class represent the concatenation of many nodes. It stores them as children
+    """
+    def __init__(self,*nodes:Tuple[Node]):
+        """This constructor builds the Concat node. It takes the children as varagrs
+        Args:
+            *node (Tuple[Node]): the child of this nod
+        """
+        self.children=nodes
+    
+    def __str__(self)->str:
+        """This methods returns a string representation of this node. It consist of a conctaenation of
+        its children. This function is recursive.
+
+        Returns:
+            str: The string representation of this node
+        """
+        return f'{"".join([str(ch) for ch in self.children])}'
 
 
 if __name__=="__main__":
-    node:Node=PR(Symbol("a"),PR(Symbol("b"),Symbol("c"))) # This represents the word (a(bc))
+    node:Node=Concat(Concat(Symbol("a"),PR(Concat(Concat(Symbol("a"),PR(Concat(Symbol("b"),Symbol("c")))),Symbol("c")))),Symbol("d")) # This represents the word a(a(bc)c)d
     print(node)
