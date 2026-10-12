@@ -1,4 +1,0 @@
-class A(D)
-class B(A)
-class C(A,B)
-class D(A)
