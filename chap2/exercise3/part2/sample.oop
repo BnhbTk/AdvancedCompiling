@@ -1,0 +1,8 @@
+class A(B)
+class B
+class C
+def f(A,C)
+def g(B,K)
+
+f(A)
+g(A,C)
